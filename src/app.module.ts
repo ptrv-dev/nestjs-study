@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 import { UserModule } from './user/user.module';
-import User from './user/entity/user.entity';
 
 @Module({
   imports: [
@@ -16,7 +16,7 @@ import User from './user/entity/user.entity';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      entities: [User],
+      autoLoadEntities: true,
       synchronize: true,
     }),
     UserModule,
@@ -24,4 +24,6 @@ import User from './user/entity/user.entity';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private dataSource: DataSource) {}
+}
