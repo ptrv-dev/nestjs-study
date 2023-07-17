@@ -20,18 +20,19 @@ export class UserService {
   }
 
   async getOneById(id: number): Promise<User> {
-    const user = await this.userRepository.findOneBy({ id: id });
+    const user = await this.userRepository.findOneBy({ id });
     if (!user)
       throw new NotFoundException("User with specified ID doesn't exist!");
     return user;
   }
 
+  async getOneByEmail(email: string): Promise<User> {
+    const user = await this.userRepository.findOneBy({ email });
+    return user;
+  }
+
   async create(dto: CreateUserDto): Promise<User> {
-    const { email, password, username } = dto;
-    const exist = await this.userRepository.findOneBy({ email });
-    if (exist)
-      throw new ConflictException('Specified email address already taken!');
-    const user = this.userRepository.save({ username, password, email });
+    const user = this.userRepository.save(dto);
     return user;
   }
 
