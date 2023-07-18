@@ -49,7 +49,7 @@ export class UserService {
     if (!user)
       throw new NotFoundException("User with specified ID doesn't exist!");
 
-    const { email, password, username } = dto;
+    const { email, password, username, role } = dto;
 
     if (email) {
       const exist = await this.userRepository.findOneBy({ email });
@@ -57,7 +57,7 @@ export class UserService {
         throw new ConflictException('Specified email address already taken!');
     }
 
-    Object.assign(user, { email, password, username });
+    Object.assign(user, { email, password, username, role });
 
     const result = await this.userRepository.save(user);
     return result;
